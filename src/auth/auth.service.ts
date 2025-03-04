@@ -17,6 +17,7 @@ import { User } from 'src/users/schemas/users.schema';
 import { Role } from 'src/roles/schemas/role.schema';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { RolesService } from 'src/roles/roles.service';
+import { UploadService } from 'src/services/UploadService';
 
 
 
@@ -31,11 +32,13 @@ export class AuthService {
         @InjectModel(Role.name) private readonly roleModel: Model<Role>,
         @InjectModel(User.name) private readonly usersModel : Model <User>,
         @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        @Inject() private uploadService: UploadService,
         private rolesService:RolesService,
-        private usersService:UsersService,
         private jwtService: JwtService) {
           this.emailTransporter = nodemailer.createTransport({
             service: 'gmail',
+            port: 578,
+            secure: false ,
             auth: {
               user: process.env.EMAIL_USER,
               pass: process.env.EMAIL_PASSWORD,
@@ -89,8 +92,8 @@ export class AuthService {
       return otp;
     }
 
-    async signupUser(signupData: SignupDto) {
-      const { email, password, name, gender, birthDate, telecom,role ,patientInfo, practitionerInfo} = signupData;
+    async signupUser(signupData: SignupDto, file?: Express.Multer.File) {
+      const { email, password, name, gender, birthDate, telecom,role ,specialization, licenseNumber} = signupData;
   
       // Check if email is already in use
       const emailInUse = await this.usersModel.findOne({email});
@@ -106,6 +109,11 @@ export class AuthService {
 
      if (!userRole) throw new BadRequestException(`Role ${role} does not exist`);
 
+     let imageUrl = null;
+     if (file) {
+       imageUrl = this.uploadService.getUploadedFileUrl(file.filename);
+     }
+
      const user = new this.usersModel({
       resourceType: role ,
       email,
@@ -115,7 +123,9 @@ export class AuthService {
       birthDate,
       telecom,
       roleId: userRole._id,
-
+      photo: imageUrl,
+      specialization,
+      licenseNumber
     });
       await user.save();
       return { message: 'success' };

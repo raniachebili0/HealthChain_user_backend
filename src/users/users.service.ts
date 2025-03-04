@@ -17,9 +17,7 @@ export class UsersService {
 
   async getUserPermissions(userId: string) {
     const user = await this.usersModel.findById(userId);
-
     if (!user) throw new BadRequestException();
-
     const role = await this.rolesService.getRoleById(user.roleId.toString());
     return role.permissions;
   }
@@ -41,6 +39,9 @@ export class UsersService {
     }
     return user; 
   }
+
+  
+
 
 
 

@@ -1,8 +1,6 @@
 import { IsEmail, IsEnum, IsObject, IsOptional, IsString, Matches, MinLength } from 'class-validator';
 import { Resource } from 'src/roles/enums/resource.enum';
 import { Roles } from 'src/roles/enums/roles.enum';
-import { PatientInfo } from 'src/users/schemas/PatientInfo.schema';
-import { PractitionerInfo } from 'src/users/schemas/PractitionerInfo.schema';
 
 
 enum Gender {
@@ -13,7 +11,7 @@ enum Gender {
 export class SignupDto {
   @IsString()
   email: string;
-  
+  @IsOptional()
   @IsEnum(Gender, {
     message: 'Gender must be one of the following values: male or female',
   })
@@ -21,6 +19,7 @@ export class SignupDto {
   @IsString()
   name: string;
   @IsString()
+  @IsOptional()
   birthDate :string;
   @IsString()
   @MinLength(6)
@@ -28,6 +27,9 @@ export class SignupDto {
   password: string;
   @IsString()
   telecom: string;
+  @IsOptional()
+  @IsString()
+  address:string
 
   /*@IsString()
   photo : string;*/
@@ -37,12 +39,11 @@ export class SignupDto {
   @IsOptional()
   role: string;
 
-  @IsObject() 
+
   @IsOptional()
-  patientInfo: PatientInfo;
+  specialization: string;
   @IsOptional()
-  @IsObject()
-  practitionerInfo: PractitionerInfo;
+  licenseNumber: string;
     
  
 }

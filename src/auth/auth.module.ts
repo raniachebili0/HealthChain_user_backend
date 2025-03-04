@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/users/users.module';
 import { RolesModule } from 'src/roles/roles.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { UploadService } from 'src/services/UploadService';
 
 
 @Module({
@@ -33,6 +34,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     }) ,   
     ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService,UploadService,],
 })
 export class AuthModule {}

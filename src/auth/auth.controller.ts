@@ -1,8 +1,10 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { SignupDto } from './dtos/signup.dto';
 import { VerifyOtpDto } from './dtos/verify_otp.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadService } from 'src/services/UploadService';
 
 @Controller('auth')
 export class AuthController {
@@ -28,23 +30,23 @@ export class AuthController {
     return 'OTP Verified';
   }
 
+
+
   @Post('signup')
-  async signUp(@Body() signupData: SignupDto) {
+  @UseInterceptors(FileInterceptor('file', new UploadService().getStorageConfig()))
+  async signUp(@Body() signupData: any , @UploadedFile() file: Express.Multer.File) {
     try {
-      const result = await this.authService.signupUser(signupData);
+      const parsedSignupData = JSON.parse(signupData.signupData);
+      const result = await this.authService.signupUser(parsedSignupData, file);
       console.log('Signup successful:', result);
       return result;
     } catch (error) {
       console.error('Signup error:', error);
       throw new BadRequestException(error.message);
-    }
-    
+    }  
   }
-
   @Post('login')
   async login(@Body() credentials: LoginDto) {
     return await this.authService.login(credentials);
   }
-
-
 }
