@@ -22,6 +22,12 @@ export class UsersController {
   }
 
 
+  @Get('doctors')
+  async findDoctors(): Promise<User[]> {
+    return this.usersService.findDoctors();
+  }
+
+
 /*
   @Post()
   create(@Body() createUserDto: CreateUserDto) {

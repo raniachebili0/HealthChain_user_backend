@@ -40,6 +40,18 @@ export class UsersService {
     return user; 
   }
 
+
+  async findDoctors():Promise<User[]>{
+    try {
+      const blocs = await this.usersModel.find({ resourceType: "practitioner" }).exec();
+      return blocs;
+    } catch (error) {
+      throw new Error('Error occurred while retrieving blocs');
+    }
+  }
+
+
+
   
 
 

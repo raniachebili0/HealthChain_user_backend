@@ -11,11 +11,20 @@ import { MedicalServiceModule } from './medical-service/medical-service.module';
 import { MedicalRecordsController } from './medical-records/medical-records.controller';
 import { ErrorHandlerMiddleware } from './middleware/error-handler.middleware';
 import { CacheModule } from '@nestjs/cache-manager';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { FileServiceModule } from './file-service/file-service.module';
 
 
 @Module({
  
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'), // Serve the uploads folder
+      serveRoot: '/uploads', // URL prefix for static files
+    }),
     CacheModule.register(/*{
       host: `${process.env.REDIS_HOST}`,
       store: redisStore,
@@ -26,7 +35,7 @@ import { CacheModule } from '@nestjs/cache-manager';
       isGlobal: true, // Makes env variables available globally
     }),
     MongooseModule.forRoot('mongodb://localhost/authDB'),
-   AuthModule, UsersModule, MedicalRecordsModule, MedicalServiceModule, AppointmentModule],
+   AuthModule, UsersModule, MedicalRecordsModule, MedicalServiceModule, AppointmentModule, FileServiceModule],
   controllers: [AppController, MedicalRecordsController],
   providers: [AppService],
 })
