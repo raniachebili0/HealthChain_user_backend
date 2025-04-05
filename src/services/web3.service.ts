@@ -8,10 +8,10 @@ export class Web3Service {
   private wallet;
 
   constructor() {
-    const RPC_URL = 'https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID';
-    const PRIVATE_KEY = 'YOUR_PRIVATE_KEY';
-    const CONTRACT_ADDRESS = 'YOUR_SMART_CONTRACT_ADDRESS';
-    const CONTRACT_ABI = [ /* Smart contract ABI */ ];
+    const RPC_URL = 'http://127.0.0.1:7545'; // Ganache local network URL
+    const PRIVATE_KEY = '0x034909f8acba868137fd99d391cf8e21bfa81b6619f51443934cec3deba13b4b'; // Your private key
+    const CONTRACT_ADDRESS = '0x10022624027b12f89FeebBC4D437db90cdFBcc89'; // Your contract address
+    const CONTRACT_ABI = [ /* Your contract ABI here */ ]; // Your contract ABI
 
     this.provider = new ethers.JsonRpcProvider(RPC_URL);
     this.wallet = new ethers.Wallet(PRIVATE_KEY, this.provider);
@@ -23,14 +23,32 @@ export class Web3Service {
   }
 
   async storeFileHash(filename: string, hash: string) {
-    const tx = await this.contract.storeFileHash(filename, hash);
-    await tx.wait();
-    return tx.hash;
+    try {
+      // Send the transaction and get the transaction hash
+      const tx = await this.contract.storeFileHash(filename, hash);
+
+      // Wait for transaction confirmation
+      await tx.wait();
+
+      console.log('Transaction receipt:', tx);
+      return tx.hash; // Return the transaction hash
+    } catch (error) {
+      console.error('Error storing file hash:', error);
+      return null;
+    }
   }
 
   async deleteFileHash(filename: string) {
-    const tx = await this.contract.removeFileHash(filename);
-    await tx.wait();
-    return tx.hash;
+    try {
+      // Remove file hash (only accessible to the owner)
+      const tx = await this.contract.removeFileHash(filename);
+      await tx.wait();
+
+      console.log('File hash removed:', tx);
+      return tx.hash;
+    } catch (error) {
+      console.error('Error deleting file hash:', error);
+      return null;
+    }
   }
 }

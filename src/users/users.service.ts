@@ -51,6 +51,18 @@ export class UsersService {
   }
 
 
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.usersModel.findById(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    // Update user properties
+    Object.assign(user, updateUserDto);
+
+    // Save updated user
+    return await user.save();
+  }
 
   
 
@@ -63,9 +75,7 @@ export class UsersService {
   }
 
  
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+ 
 
   remove(id: number) {
     return `This action removes a #${id} user`;

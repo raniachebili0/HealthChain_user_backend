@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req, UnauthorizedException, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,6 +27,12 @@ export class UsersController {
     return this.usersService.findDoctors();
   }
 
+  @UseGuards(AuthGuard)
+  @Patch('update')
+  async update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    const userId =  req.userId;
+    return await this.usersService.update(userId, updateUserDto);
+  }
 
 /*
   @Post()

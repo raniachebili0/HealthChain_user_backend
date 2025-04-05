@@ -57,7 +57,8 @@ export class User   {  // Extend Document to inherit Mongoose methods
 
   @Prop({  type: [SchemaTypes.ObjectId], ref: 'MedicalRecords' })
   MedicalRecords: Types.ObjectId[];  // Reference to Encounter
-
+  @Prop({ type: [SchemaTypes.ObjectId], ref: 'Appointment', default: [] })
+  appointments: Types.ObjectId[];
 
 }
 

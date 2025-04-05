@@ -23,6 +23,6 @@ export class UploadService {
   }
 
   getUploadedFileUrl(filename: string): string {
-    return `http://127.0.0.1:3000/uploads/${filename}`;
+    return `http://10.0.2.2:3000/uploads/${filename}`;
   }
 }

@@ -45,6 +45,8 @@ export class AuthController {
       throw new BadRequestException(error.message);
     }  
   }
+
+  
   @Post('login')
   async login(@Body() credentials: LoginDto) {
     return await this.authService.login(credentials);

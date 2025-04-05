@@ -1,0 +1,19 @@
+console.log(result);
+const result = await contract.someFunction(); // Call a function of your contract
+const contract = await ethers.getContractAt("YourContractName", contractAddress);
+const contractAddress = "0x974010149495e3f4e4ed70d7f2b352Fb34761275"; // Deployed contract address
+console.log((await deployer.getBalance()).toString()); // Log the balance
+const [deployer] = await ethers.getSigners(); // Get the signer
+const { ethers } = require("hardhat");
+console.log((await deployer.getBalance()).toString());
+const deployer = provider.getSigner(); 
+const provider = new ethers.JsonRpcProvider("http://127.0.0.1:7545");
+console.log((await deployer.getBalance()).toString()); // Ensure the balance is printed as a string
+const [deployer] = await ethers.getSigners();
+console.log(await deployer.getBalance()); // Check balance of the deployer account
+const [deployer] = await ethers.getSigners(); provider.getSigner(); 
+const provider = new ethers.JsonRpcProvider("http://127.0.0.1:7545");
+console.log((await deployer.getBalance()).toString()); // Ensure the balance is printed as a string
+const [deployer] = await ethers.getSigners();
+console.log(await deployer.getBalance()); // Check balance of the deployer account
+const [deployer] = await ethers.getSigners();
