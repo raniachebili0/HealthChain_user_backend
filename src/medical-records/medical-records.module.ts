@@ -5,10 +5,12 @@ import { UploadService } from 'src/services/UploadService';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MedicalRecords, MedicalRecordsSchema } from './schemas/medical-recorsds.schema';
 import { AccessFile, AccessFileSchema } from './schemas/access_file.schema';
+import { HttpModule } from '@nestjs/axios';
 
 
 @Module({
   imports:[
+    HttpModule,
   MongooseModule.forFeature([{
     name: MedicalRecords.name,
     schema: MedicalRecordsSchema

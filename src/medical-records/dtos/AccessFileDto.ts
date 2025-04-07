@@ -1,24 +1,35 @@
-import { Type } from "class-transformer";
-import { IsNotEmpty, IsMongoId, IsString, IsDate } from "class-validator";
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsMongoId, IsString, IsDate, IsOptional } from 'class-validator';
 
-export class AccessFileDto{
- 
-  fileName: string;  
- 
- 
-  patient: string; 
+export class AccessFileDto {
+  @IsNotEmpty()
+  @IsString()
+  fileName: string;
 
- 
-  doctor: string; 
- 
+  @IsOptional()
+  @IsMongoId()
+  patient: string;
 
-  description: string; 
+  @IsOptional()
+  @IsMongoId()
+  doctor: string;
 
-  DebuitAccessDate: Date; 
+  @IsOptional()
+  @IsString()
+  description: string;
 
-  FinAccessDate: Date; 
-  
-  fileUrl : string;
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  DebuitAccessDate: Date;
 
-  fileType: string;
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  FinAccessDate: Date;
+
+  @IsOptional()
+  @IsString()
+  fileUrl: string;
+
 }

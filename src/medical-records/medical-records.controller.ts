@@ -1,18 +1,25 @@
 
 import { MedicalRecordsService } from './medical-records.service';
-import { Controller, Post, UseInterceptors, UploadedFile, Delete, Param, Get, Res, UseGuards, Req, BadRequestException, Body, Query } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Delete, Param, Get, Res, UseGuards, Req, BadRequestException, Body, Query, Patch } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AuthGuard } from 'src/guards/authentication.guard';
 import { UploadService } from 'src/services/UploadService';
+import { AccessFileDto } from './dtos/AccessFileDto';
 
 
 @Controller('medical-records')
 export class MedicalRecordsController {
     constructor(private readonly medicalRecordsService: MedicalRecordsService) {}
     
+
+
+    @Post('run')
+    async runWorkflow(@Body('imageUrl') imageUrl: string) {
+        return this.medicalRecordsService.runWorkflow(imageUrl);
+    }
     
     @UseGuards(AuthGuard)
     @Post('upload')
@@ -38,6 +45,14 @@ export class MedicalRecordsController {
       console.log(userId);
       return this.medicalRecordsService.getListFiles(userId,fileType);
     }
+
+    @UseGuards(AuthGuard)
+    @Get('getAccessfiles')
+    accessfileslist( @Req() req) {
+      const userId =  req.userId;
+      console.log(userId);
+      return this.medicalRecordsService.getListAccessFiles(userId);
+    }
   
     @UseGuards(AuthGuard)
     @Get(':fileId')
@@ -51,11 +66,33 @@ export class MedicalRecordsController {
       return this.medicalRecordsService.deleteFile(fileId);
     }
 
+
+    @Patch(':id/description')
+    updateDescription(
+      @Param('id') id: string,
+      @Body('description') description: string,
+    ) {
+      return this.medicalRecordsService.updateDescription(id, description);
+    }
+
     
 
+  
 
 
 
+
+ // @UseGuards(AuthGuard)
+  @Post('accessfile')
+  async create(@Body() accessFileDto: AccessFileDto ) {
+    console.log('Received body:', accessFileDto);
+    try {
+      return await this.medicalRecordsService.createAccessFile(accessFileDto);
+    } catch (error) {
+      console.error('creat file access error:', error);
+      throw new BadRequestException(error.message);
+    }  
+  }
 
 
 

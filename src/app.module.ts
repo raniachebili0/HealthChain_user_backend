@@ -19,6 +19,7 @@ import { FileServiceModule } from './file-service/file-service.module';
 import { PractitionerModule } from './practitioner/practitioner.module';
 import { PatientModule } from './patient/patient.module';
 import { OpenaiModule } from './openai/openai.module';
+import { RoboflowService } from './roboflow/roboflow.service';
 
 
 @Module({
@@ -42,7 +43,7 @@ import { OpenaiModule } from './openai/openai.module';
    AuthModule, UsersModule, MedicalRecordsModule, MedicalServiceModule, FileServiceModule, PatientModule,
    PractitionerModule,OpenaiModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RoboflowService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

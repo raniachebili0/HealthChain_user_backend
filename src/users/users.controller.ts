@@ -22,6 +22,15 @@ export class UsersController {
   }
 
 
+  //@UseGuards(AuthGuard)
+  @Get('getuserinfo/:id')
+  findOnebyid(@Param('id') userId : string) {
+    if (!userId) {
+      throw new UnauthorizedException('User not authenticated');
+    }  
+    return this.usersService.findOne(userId);
+  }
+
   @Get('doctors')
   async findDoctors(): Promise<User[]> {
     return this.usersService.findDoctors();
