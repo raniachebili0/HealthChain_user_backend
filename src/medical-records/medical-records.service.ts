@@ -79,24 +79,30 @@ export class MedicalRecordsService {
             throw new InternalServerErrorException('Failed to delete file');
         }
       }
-    async getListFiles(patient: string, fileType: string) {
+      async getListFiles(patient: string, fileType: string) {
         try {
-           
-            const files = await this.medicalRecord
-                .find({ patient, fileType })  // Filter by userId and fileType
-                .exec();
-    
-            if (files.length === 0) {
-                throw new NotFoundException('No files found for the specified user and file type');
-            }
-    
-            return files;  // Return the list of files
+          const files = await this.medicalRecord
+            .find({ patient, fileType })
+            .exec();
+      
+          if (files.length === 0) {
+            // Instead of throwing an exception, return a message with empty list
+            return {
+              message: 'No files found for the specified user and file type',
+              files: [],
+            };
+          }
+      
+          return {
+            message: 'Files retrieved successfully',
+            files,
+          };
         } catch (error) {
-            console.error('Error retrieving files:', error);
-            throw new InternalServerErrorException('Failed to retrieve files');
+          console.error('Error retrieving files:', error);
+          throw new InternalServerErrorException('Failed to retrieve files');
         }
-    }
-
+      }
+      
 
 
 
